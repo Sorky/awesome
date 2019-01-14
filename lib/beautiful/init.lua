@@ -190,7 +190,7 @@ function beautiful.init(config)
         local homedir = os.getenv("HOME")
 
         -- If `config` is the path to a theme file, run this file,
-        -- to make it into a table so it can be saved as the theme.
+        -- otherwise if it is a theme table, save it.
         t_config = type(config)
         if t_config == 'string' then
             -- Expand the '~' $HOME shortcut
