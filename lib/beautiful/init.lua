@@ -186,23 +186,25 @@ end
 --   containing all the theme values.
 function beautiful.init(config)
     if config then
-        local state, path = nil, nil
+        local state, t_config, t_theme = nil, nil, nil
         local homedir = os.getenv("HOME")
 
         -- If `config` is the path to a theme file, run this file,
-        -- otherwise if it is a theme table, save it.
-        if type(config) == 'string' then
+        -- to make it into a table so it can be saved as the theme.
+        t_config = type(config)
+        if t_config == 'string' then
             -- Expand the '~' $HOME shortcut
             config = config:gsub("^~/", homedir .. "/")
             local dir = Gio.File.new_for_path(config):get_parent()
-            path = dir and (dir:get_path().."/") or nil
+            rawset(beautiful, "theme_path", dir and (dir:get_path().."/") or nil)
             theme = protected_call(dofile, config)
-            if type(theme) == 'table' then state = next(theme) end
-        elseif type(config) == 'table' then
+            t_theme = type(theme)
+            state = t_theme == 'table' and next(theme)
+        elseif t_config == 'table' then
+            rawset(beautiful, "theme_path", nil)
             theme = config
             state = next(theme)
         end
-        rawset(beautiful, "theme_path", path)
 
         if state then
             -- expand '~'
@@ -215,9 +217,14 @@ function beautiful.init(config)
             if theme.font then set_font(theme.font) end
             return true
         else
+            rawset(beautiful, "theme_path", nil)
             theme = {}
-			local error = "TO DO"
-            return gears_debug.print_error("beautiful: error loading theme: " .. error)
+            local file = t_config == 'string' and (" from: " .. config)
+            local err = (file and t_theme == 'table' and "got an empty table" .. file)
+                     or (file and t_theme ~= 'table' and "got a " .. t_theme .. file)
+                     or (t_config == 'table' and "got an empty table")
+                     or ("got a " .. t_config)
+            return gears_debug.print_error("beautiful: error loading theme: " .. err)
         end
     else
         return gears_debug.print_error("beautiful: error loading theme: no theme specified")
