@@ -186,12 +186,12 @@ end
 --   containing all the theme values.
 function beautiful.init(config)
     if config then
-        local state, t_config, t_theme = nil, nil, nil
+        local state, t_theme = nil, nil
         local homedir = os.getenv("HOME")
 
         -- If `config` is the path to a theme file, run this file,
         -- otherwise if it is a theme table, save it.
-        t_config = type(config)
+        local t_config = type(config)
         if t_config == 'string' then
             -- Expand the '~' $HOME shortcut
             config = config:gsub("^~/", homedir .. "/")
