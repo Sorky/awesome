@@ -83,9 +83,9 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     usr/share/icon6.xpm
         --     usr/share/icon7.svg
 
-        assert_found_in_path('/spec/menubar/usr/share/icon5.png', '/spec/menubar/usr/share/icon5.png')
-        assert_found_in_path('/spec/menubar/usr/share/icon6.xpm', '/spec/menubar/usr/share/icon6.xpm')
-        assert_found_in_path('/spec/menubar/usr/share/icon7.svg', '/spec/menubar/usr/share/icon7.svg')
+        assert_found_in_path('./spec/menubar/usr/share/icon5.png', './spec/menubar/usr/share/icon5.png')
+        assert_found_in_path('./spec/menubar/usr/share/icon6.xpm', './spec/menubar/usr/share/icon6.xpm')
+        assert_found_in_path('./spec/menubar/usr/share/icon7.svg', './spec/menubar/usr/share/icon7.svg')
 
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
@@ -101,8 +101,8 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .icons/icon7.svg
 
         assert_found_in_path('icon5.png', '/.icons/icon5.png')
-        assert_found_in_path('icon6.xpm', '/spec/menubar/.icons/icon6.xpm')
-        assert_found_in_path('icon7.svg', '/spec/menubar/.icons/icon7.svg')
+        assert_found_in_path('icon6.xpm', './spec/menubar/home/.icons/icon6.xpm')
+        assert_found_in_path('icon7.svg', './spec/menubar/home/.icons/icon7.svg')
 
         --  Will fail as file does not exist (but extension is supported)
         assert.is_false(utils.lookup_icon_uncached('icon8.png'))
@@ -116,8 +116,8 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
-        assert_found_in_path('icon6', '/spec/menubar/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
-        assert_found_in_path('icon7', '/spec/menubar/.icons/icon7.svg') -- Similar to original tests and testing svg extension
+        assert_found_in_path('icon6', './spec/menubar/home/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
+        assert_found_in_path('icon7', './spec/menubar/home/.icons/icon7.svg') -- Similar to original tests and testing svg extension
 
         assert.is_false(utils.lookup_icon_uncached('/png')) -- supported file does not exist in given location
         assert.is_false(utils.lookup_icon_uncached('.png')) -- file does not exist
