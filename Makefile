@@ -7,7 +7,17 @@ endif
 
 BUILDDIR=build
 
-all: awesome ;
+# Run "make" in $(BUILDDIR) by default.
+# This is required to generate all files already, which should not be generated
+# with "(sudo) make install" only later.
+cmake-build: $(BUILDDIR)/Makefile
+	$(ECHO) "Building…"
+	$(MAKE) -C $(BUILDDIR)
+
+# Run CMake with CMAKE_ARGS defined on command line ("make CMAKE_ARGS=…").
+ifeq ($(origin CMAKE_ARGS),command line)
+.PHONY: $(BUILDDIR)/Makefile
+endif
 
 $(BUILDDIR)/Makefile:
 	$(ECHO) "Creating build directory and running cmake in it. You can also run CMake directly, if you want."
