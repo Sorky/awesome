@@ -3,8 +3,6 @@
 # Test all themes.
 # This should be run via `make check-themes` (or manually from the build
 # directory).
-#
-# It uses tests/run.sh internally, which handles coverage.
 
 set -e
 
