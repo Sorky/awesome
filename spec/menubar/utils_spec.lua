@@ -83,7 +83,7 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     usr/share/icon6.xpm
         --     usr/share/icon7.svg
 
-        assert_found_in_path('./spec/menubar/usr/share/icon5.png', './spec/menubar/usr/share/icon5.png')
+        assert_found_in_path(root..'/usr/share/icon5.png', '/usr/share/icon5.png')
         assert_found_in_path('./spec/menubar/usr/share/icon6.xpm', './spec/menubar/usr/share/icon6.xpm')
         assert_found_in_path('./spec/menubar/usr/share/icon7.svg', './spec/menubar/usr/share/icon7.svg')
 
