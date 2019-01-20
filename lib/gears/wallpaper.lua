@@ -57,7 +57,7 @@ local function resolve_wallpaper(wallpaper, path, s)
     end
 
     if type(wp) == "string" then
-        local wp_path = wp:sub(1, 1) == '/' and "" or path
+        local wp_path = wp:sub(1, 1) == '/' and "" or (path or "")
         return wp_path .. wp
     else
         return wp
