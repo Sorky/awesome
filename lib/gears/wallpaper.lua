@@ -149,6 +149,8 @@ end
 -- @param background The background color that should be used. Gets handled via
 --   gears.color. The default is black.
 -- @param scale The scale factor for the wallpaper. Default is 1 (original size).
+-- @param path The path where the wallpaper file is located. Can be omitted if surf
+-- has the full path in the filename.
 -- @see gears.color
 function wallpaper.centered(surf, s, background, scale, path)
     local geom, cr = wallpaper.prepare_context(s)
@@ -189,6 +191,8 @@ end
 -- @param s The screen whose wallpaper should be set. Can be nil, in which case
 --   all screens are set.
 -- @param offset This can be set to a table with entries x and y.
+-- @param path The path where the wallpaper file is located. Can be omitted if surf
+-- has the full path in the filename.
 function wallpaper.tiled(surf, s, offset, path)
     local _, cr = wallpaper.prepare_context(s)
 
@@ -218,6 +222,8 @@ end
 -- @param ignore_aspect If this is true, the image's aspect ratio is ignored.
 --   The default is to honor the aspect ratio.
 -- @param offset This can be set to a table with entries x and y.
+-- @param path The path where the wallpaper file is located. Can be omitted if surf
+-- has the full path in the filename.
 function wallpaper.maximized(surf, s, ignore_aspect, offset, path)
     local geom, cr = wallpaper.prepare_context(s)
     local original_surf = resolve_wallpaper(surf, path, s)
@@ -257,6 +263,8 @@ end
 --   all screens are set.
 -- @param background The background color that should be used. Gets handled via
 --   gears.color. The default is black.
+-- @param path The path where the wallpaper file is located. Can be omitted if surf
+-- has the full path in the filename.
 -- @see gears.color
 function wallpaper.fit(surf, s, background, path)
     local geom, cr = wallpaper.prepare_context(s)
