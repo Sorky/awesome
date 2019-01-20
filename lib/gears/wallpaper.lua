@@ -28,7 +28,6 @@ local color = require("gears.color")
 local surface = require("gears.surface")
 local timer = require("gears.timer")
 local debug = require("gears.debug")
-local beautiful = require("beautiful")
 local root = root
 
 local wallpaper = { mt = {} }
@@ -45,8 +44,8 @@ local function get_screen(s)
     return s and screen[s]
 end
 
-local function resolve_wallpaper(wallpaper, s)
-    local wp = wallpaper or beautiful.wallpaper
+local function resolve_wallpaper(wallpaper, path, s)
+    local wp = wallpaper
     local wp_type = type(wp)
 
     -- Pass types we don't resolve (eg: cairo surface) straight through untouched
@@ -58,7 +57,7 @@ local function resolve_wallpaper(wallpaper, s)
     end
 
     if type(wp) == "string" then
-        local wp_path = wp:sub(1, 1) == '/' and "" or (beautiful.wallpaper_path or beautiful.theme_path or "")
+        local wp_path = wp:sub(1, 1) == '/' and "" or path
         return wp_path .. wp
     else
         return wp
@@ -151,9 +150,9 @@ end
 --   gears.color. The default is black.
 -- @param scale The scale factor for the wallpaper. Default is 1 (original size).
 -- @see gears.color
-function wallpaper.centered(surf, s, background, scale)
+function wallpaper.centered(surf, s, background, scale, path)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = resolve_wallpaper(surf, s)
+    local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
     background = color(background)
 
@@ -190,14 +189,14 @@ end
 -- @param s The screen whose wallpaper should be set. Can be nil, in which case
 --   all screens are set.
 -- @param offset This can be set to a table with entries x and y.
-function wallpaper.tiled(surf, s, offset)
+function wallpaper.tiled(surf, s, offset, path)
     local _, cr = wallpaper.prepare_context(s)
 
     if offset then
         cr:translate(offset.x, offset.y)
     end
 
-    local original_surf = resolve_wallpaper(surf, s)
+    local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
     local pattern = cairo.Pattern.create_for_surface(surf)
     pattern.extend = cairo.Extend.REPEAT
@@ -219,9 +218,9 @@ end
 -- @param ignore_aspect If this is true, the image's aspect ratio is ignored.
 --   The default is to honor the aspect ratio.
 -- @param offset This can be set to a table with entries x and y.
-function wallpaper.maximized(surf, s, ignore_aspect, offset)
+function wallpaper.maximized(surf, s, ignore_aspect, offset, path)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = resolve_wallpaper(surf, s)
+    local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
     local w, h = surface.get_size(surf)
     local aspect_w = geom.width / w
@@ -259,9 +258,9 @@ end
 -- @param background The background color that should be used. Gets handled via
 --   gears.color. The default is black.
 -- @see gears.color
-function wallpaper.fit(surf, s, background)
+function wallpaper.fit(surf, s, background, path)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = resolve_wallpaper(surf, s)
+    local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
     background = color(background)
 
