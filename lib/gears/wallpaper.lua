@@ -28,6 +28,7 @@ local color = require("gears.color")
 local surface = require("gears.surface")
 local timer = require("gears.timer")
 local debug = require("gears.debug")
+local beautiful = require("beautiful")
 local root = root
 
 local wallpaper = { mt = {} }
@@ -42,6 +43,26 @@ local pending_wallpaper = nil
 
 local function get_screen(s)
     return s and screen[s]
+end
+
+local function resolve_wallpaper(wallpaper, s)
+    local wp = wallpaper or beautiful.wallpaper
+    local wp_type = type(wp)
+
+    -- Pass types we don't resolve (eg: cairo surface) straight through untouched
+    if wp_type ~= "string" and wp_type ~= "table" and wp_type ~= "function" then return wallpaper end
+
+    -- Table & function need to resolve down to a string or theme_assets
+    if wp_type == "table" then wp = s and wp[s.index] or wp[1]
+    elseif wp_type == "function" then wp = wp(s)
+    end
+
+    if type(wp) == "string" then
+        local wp_path = wp:sub(1, 1) == '/' and "" or (beautiful.wallpaper_path or beautiful.theme_path or "")
+        return wp_path .. wp
+    else
+        return wp
+    end
 end
 
 --- Prepare the needed state for setting a wallpaper.
@@ -132,8 +153,8 @@ end
 -- @see gears.color
 function wallpaper.centered(surf, s, background, scale)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = surf
-    surf = surface.load_uncached(surf)
+    local original_surf = resolve_wallpaper(surf, s)
+    surf = surface.load_uncached(original_surf)
     background = color(background)
 
     -- Set default scale if unset
@@ -176,8 +197,8 @@ function wallpaper.tiled(surf, s, offset)
         cr:translate(offset.x, offset.y)
     end
 
-    local original_surf = surf
-    surf = surface.load_uncached(surf)
+    local original_surf = resolve_wallpaper(surf, s)
+    surf = surface.load_uncached(original_surf)
     local pattern = cairo.Pattern.create_for_surface(surf)
     pattern.extend = cairo.Extend.REPEAT
     cr.source = pattern
@@ -200,8 +221,8 @@ end
 -- @param offset This can be set to a table with entries x and y.
 function wallpaper.maximized(surf, s, ignore_aspect, offset)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = surf
-    surf = surface.load_uncached(surf)
+    local original_surf = resolve_wallpaper(surf, s)
+    surf = surface.load_uncached(original_surf)
     local w, h = surface.get_size(surf)
     local aspect_w = geom.width / w
     local aspect_h = geom.height / h
@@ -240,8 +261,8 @@ end
 -- @see gears.color
 function wallpaper.fit(surf, s, background)
     local geom, cr = wallpaper.prepare_context(s)
-    local original_surf = surf
-    surf = surface.load_uncached(surf)
+    local original_surf = resolve_wallpaper(surf, s)
+    surf = surface.load_uncached(original_surf)
     background = color(background)
 
     -- Fill the area with the background
