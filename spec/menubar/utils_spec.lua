@@ -84,9 +84,9 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     usr/share/icon7.svg
 
         -- These aren't working in Travis CI - Check later
-        --assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
-        --assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
-        --assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
+        assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
+        assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
+        assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
 
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
