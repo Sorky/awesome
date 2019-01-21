@@ -44,16 +44,16 @@ local function get_screen(s)
     return s and screen[s]
 end
 
-local function resolve_wallpaper(wallpaper, path, s)
-    local wp_type = type(wallpaper)
+local function resolve_wallpaper(surf, path, s)
+    local wp = surf
+    local wp_type = type(wp)
 
     -- Pass types we don't resolve straight through untouched
-    if wp_type ~= "string" and wp_type ~= "table" and wp_type ~= "function" then return wallpaper end
+    if wp_type ~= "string" and wp_type ~= "table" and wp_type ~= "function" then return surf end
 
-    local wp = ""
     -- Table & function need to resolve down to a string or surface
-    if wp_type == "table" then wp = s and wallpaper[s.index] or wallpaper[1]
-    elseif wp_type == "function" then wp = wallpaper(s) end
+    if wp_type == "table" then wp = s and surf[s.index] or surf[1]
+    elseif wp_type == "function" then wp = surf(s) end
 
     if type(wp) == "string" then wp = (wp:sub(1, 1) ~= '/' and (path or "") or "") .. wp end
     return wp
