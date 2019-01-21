@@ -6,13 +6,12 @@
 local utils = require("menubar.utils")
 local theme = require("beautiful")
 local glib = require("lgi").GLib
+local gfs = require("gears.filesystem")
 
 describe("menubar.utils lookup_icon_uncached", function()
     local shimmed = {}
+    local gfs_shim
     local icon_theme
-
-    local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
-print("2.1>",root)
 
     local function assert_found_in_path(icon, path)
 print("2.2.1>",icon)
@@ -22,6 +21,8 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
     end
 
     setup(function()
+        local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
+
         local function shim(name, retval)
             shimmed[name] = glib[name]
             glib[name] = function() return retval end
@@ -34,6 +35,9 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
             root .. "/usr/share"
         })
 
+        gfs_shim = gfs[file_readable]
+        gfs[file_readable] = function(filename) print("YES!") return gfs_shim(root..filename) end
+
         icon_theme = theme.icon_theme
         theme.icon_theme = 'awesome'
     end)
@@ -42,9 +46,10 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
         for name, func in pairs(shimmed) do
             glib[name] = func
         end
+        gfs[file_readable] = gfs_shim
         theme.icon_theme = icon_theme
     end)
-
+--[[
     it('finds icons in icon base directories, in correct order', function()
 
         -- Shimmed icon base directories contain the following icons:
@@ -79,7 +84,7 @@ print("2.4>")
         assert.is_false(utils.lookup_icon_uncached(false))
         assert.is_false(utils.lookup_icon_uncached(''))
     end)
-
+--]]
 -- Check for icon not in search path :: if icon_file:sub(1, 1) == '/' and supported_icon_formats[icon_file_ext] then
     it('finds icons even those not in the search paths when full path specified', function()
 
@@ -90,14 +95,14 @@ print("2.4>")
         --     usr/share/icon7.svg
 
 print("2.5>")
-        assert_found_in_path(root..'/usr/share/icon5.png', root..'/usr/share/icon5.png')
-        assert_found_in_path(root..'/usr/share/icon6.xpm', root..'/usr/share/icon6.xpm')
-        assert_found_in_path(root..'/usr/share/icon7.svg', root..'/usr/share/icon7.svg')
+        assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
+        assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
+        assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
 
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
     end)
-
+--[[
 -- Check icon with specified extension matching :: if supported_icon_formats[icon_file_ext] and
     it('finds icons with specified supported extension in search path', function()
 
@@ -133,6 +138,7 @@ print("2.7>")
         assert.is_false(utils.lookup_icon_uncached('png')) -- file does not exist
         assert.is_false(utils.lookup_icon_uncached('icon9')) -- file does not exist
     end)
+--]]
 end)
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
