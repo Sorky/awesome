@@ -91,7 +91,7 @@ print("2.4>")
         --     usr/share/icon7.svg
 
 print("2.5>")
-        assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
+        --assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
         assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
         assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
 
