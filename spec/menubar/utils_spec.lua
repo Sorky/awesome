@@ -7,12 +7,13 @@ local utils = require("menubar.utils")
 local theme = require("beautiful")
 local glib = require("lgi").GLib
 
+local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
+print("2.1>",root)
+
 describe("menubar.utils lookup_icon_uncached", function()
     local shimmed = {}
     local icon_theme
 
-    local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
-print("2.1>",root)
 
     local function assert_found_in_path(icon, path)
 print("2.2.1>",icon)
