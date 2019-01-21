@@ -15,7 +15,7 @@ describe("menubar.utils lookup_icon_uncached", function()
     local icon_theme
 
     local function assert_found_in_path(icon, path)
-        assert.matches(path, utils.lookup_icon_uncached(icon) or '')
+        assert.matches(path .. "$", utils.lookup_icon_uncached(icon) or '')
     end
 
     setup(function()
