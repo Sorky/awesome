@@ -244,7 +244,7 @@ function utils.lookup_icon_uncached(icon_file)
                 end
             end
         end
-print("1.8>",possible_file)
+--print("1.8>",possible_file)
         return false
     end
 end
