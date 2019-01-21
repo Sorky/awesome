@@ -15,9 +15,6 @@ describe("menubar.utils lookup_icon_uncached", function()
     local icon_theme
 
     local function assert_found_in_path(icon, path)
-print("2.2.1>",icon)
-print("2.2.2>",path)
-print("2.2.3>",utils.lookup_icon_uncached(icon))
         assert.matches(path, utils.lookup_icon_uncached(icon) or '')
     end
 
@@ -64,14 +61,12 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
         --     .local/share/icons/icon[4-5].png
         --     .icons/icon5.png
 
-print("2.3>")
         assert_found_in_path('icon1', '/usr/share/pixmaps/icon1.png')
         assert_found_in_path('icon2', '/usr/share/icons/icon2.png')
         assert_found_in_path('icon3', '/usr/local/share/icons/icon3.png')
         assert_found_in_path('icon4', '/.local/share/icons/icon4.png')
         assert_found_in_path('icon5', '/.icons/icon5.png')
     end)
---[[
 
     it('finds icons in $HOME/.icons/<theme>/<size>/apps/', function()
 
@@ -83,13 +78,12 @@ print("2.3>")
 
 -- Check for no argument :: if not icon_file or icon_file == "" then
     it('no icon specified', function()
-print("2.4>")
         assert.is_false(utils.lookup_icon_uncached())
         assert.is_false(utils.lookup_icon_uncached(nil)) -- Same as above?
         assert.is_false(utils.lookup_icon_uncached(false))
         assert.is_false(utils.lookup_icon_uncached(''))
     end)
---]]
+
 -- Check for icon not in search path :: if icon_file:sub(1, 1) == '/' and supported_icon_formats[icon_file_ext] then
     it('finds icons even those not in the search paths when full path specified', function()
 
@@ -99,7 +93,6 @@ print("2.4>")
         --     usr/share/icon6.xpm
         --     usr/share/icon7.svg
 
-print("2.5>")
         assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
         assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
         assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
@@ -107,7 +100,7 @@ print("2.5>")
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
     end)
---[[
+
 -- Check icon with specified extension matching :: if supported_icon_formats[icon_file_ext] and
     it('finds icons with specified supported extension in search path', function()
 
@@ -117,7 +110,6 @@ print("2.5>")
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
-print("2.6>")
         assert_found_in_path('icon5.png', '/.icons/icon5.png')
         assert_found_in_path('icon6.xpm', '/.icons/icon6.xpm')
         assert_found_in_path('icon7.svg', '/.icons/icon7.svg')
@@ -134,7 +126,6 @@ print("2.6>")
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
-print("2.7>")
         assert_found_in_path('icon6', './spec/menubar/home/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
         assert_found_in_path('icon7', './spec/menubar/home/.icons/icon7.svg') -- Similar to original tests and testing svg extension
 
