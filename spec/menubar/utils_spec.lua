@@ -49,7 +49,7 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
         gfs.file_readable = gfs_shim
         theme.icon_theme = icon_theme
     end)
---[[
+
     it('finds icons in icon base directories, in correct order', function()
 
         -- Shimmed icon base directories contain the following icons:
@@ -67,6 +67,7 @@ print("2.3>")
         assert_found_in_path('icon4', '/.local/share/icons/icon4.png')
         assert_found_in_path('icon5', '/.icons/icon5.png')
     end)
+--[[
 
     it('finds icons in $HOME/.icons/<theme>/<size>/apps/', function()
 
