@@ -15,8 +15,9 @@ describe("menubar.utils lookup_icon_uncached", function()
 print("2.1>",root)
 
     local function assert_found_in_path(icon, path)
-print("2.2>",icon, path)
-print("2.2.1>",utils.lookup_icon_uncached(icon))
+print("2.2.1>",icon)
+print("2.2.2>",path)
+print("2.2.3>",utils.lookup_icon_uncached(icon))
         assert.matches(path, utils.lookup_icon_uncached(icon) or '')
     end
 
