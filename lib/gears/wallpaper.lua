@@ -45,19 +45,21 @@ local function get_screen(s)
 end
 
 local function resolve_wallpaper(surf, path, s)
-    local wp = surf
-    local wp_type = type(wp)
+    if not surf then return "some default?" or error("some message") end
 
+    local wp_type = type(surf)
     -- Pass types we don't resolve straight through untouched
     if wp_type ~= "string" and wp_type ~= "table" and wp_type ~= "function" then return surf end
 
-    -- Table & function need to resolve down to a string or surface
+    local wp = surf
+   -- Table & function need to resolve down to a string or surface
     if wp_type == "table" then wp = s and surf[s.index] or surf[1]
     elseif wp_type == "function" then wp = surf(s) end
 
     if type(wp) == "string" then wp = (wp:sub(1, 1) ~= '/' and (path or "") or "") .. wp end
     return wp
 end
+
 --- Prepare the needed state for setting a wallpaper.
 -- This function returns a cairo context through which a wallpaper can be drawn.
 -- The context is only valid for a short time and should not be saved in a
@@ -147,6 +149,7 @@ end
 -- has the full path in the filename.
 -- @see gears.color
 function wallpaper.centered(surf, s, background, scale, path)
+    if not surf then return "some default?" or error("some message") end
     local geom, cr = wallpaper.prepare_context(s)
     local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
@@ -188,13 +191,14 @@ end
 -- @param path The path where the wallpaper file is located. Can be omitted if surf
 -- has the full path in the filename.
 function wallpaper.tiled(surf, s, offset, path)
+    if not surf then return "some default?" or error("some message") end
     local _, cr = wallpaper.prepare_context(s)
 
     if offset then
         cr:translate(offset.x, offset.y)
     end
 
-    local original_surf = resolve_wallpaper(surf, path, s)
+    local original_surf = resolve_wallpaper(surf, path, s) or "default"
     surf = surface.load_uncached(original_surf)
     local pattern = cairo.Pattern.create_for_surface(surf)
     pattern.extend = cairo.Extend.REPEAT
@@ -219,6 +223,7 @@ end
 -- @param path The path where the wallpaper file is located. Can be omitted if surf
 -- has the full path in the filename.
 function wallpaper.maximized(surf, s, ignore_aspect, offset, path)
+    if not surf then return "some default?" or error("some message") end
     local geom, cr = wallpaper.prepare_context(s)
     local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
@@ -261,6 +266,7 @@ end
 -- has the full path in the filename.
 -- @see gears.color
 function wallpaper.fit(surf, s, background, path)
+    if not surf then return "some default?" or error("some message") end
     local geom, cr = wallpaper.prepare_context(s)
     local original_surf = resolve_wallpaper(surf, path, s)
     surf = surface.load_uncached(original_surf)
