@@ -20,7 +20,7 @@ describe("menubar.utils lookup_icon_uncached", function()
 
     setup(function()
         local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
---[[
+
         local function shim(name, retval)
             shimmed[name] = glib[name]
             glib[name] = function() return retval end
@@ -32,7 +32,7 @@ describe("menubar.utils lookup_icon_uncached", function()
             "/usr/local/share",
             "/usr/share"
         })
---]]
+
         gfs_shim_dir_readable = gfs.dir_readable
         gfs.dir_readable = function(path) return gfs_shim_dir_readable(root..path) end
         gfs_shim_file_readable = gfs.file_readable
