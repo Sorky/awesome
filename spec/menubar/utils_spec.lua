@@ -10,7 +10,8 @@ local gfs = require("gears.filesystem")
 
 describe("menubar.utils lookup_icon_uncached", function()
     local shimmed = {}
-    local gfs_shim
+    local gfs_shim_dir_readable
+    local gfs_shim_file_readable
     local icon_theme
 
     local function assert_found_in_path(icon, path)
@@ -27,14 +28,7 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
             shimmed[name] = glib[name]
             glib[name] = function() return retval end
         end
---[[
-        shim('get_home_dir',         root .. "/home")
-        shim('get_user_data_dir',    root .. "/home/.local/share")
-        shim('get_system_data_dirs', {
-            root .. "/usr/local/share",
-            root .. "/usr/share"
-        })
---]]
+
         shim('get_home_dir',         "/home")
         shim('get_user_data_dir',    "/home/.local/share")
         shim('get_system_data_dirs', {
@@ -42,8 +36,10 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
             "/usr/share"
         })
 
-        gfs_shim = gfs.file_readable
-        gfs.file_readable = function(filename) print("YES!") return gfs_shim(root..filename) end
+        gfs_shim_dir_readable = gfs.dir_readable
+        gfs.dir_readable = function(path) return gfs_shim_dir_readable(root..path) end
+        gfs_shim_file_readable = gfs.file_readable
+        gfs.file_readable = function(filename) return gfs_shim_file_readable(root..filename) end
 
         icon_theme = theme.icon_theme
         theme.icon_theme = 'awesome'
@@ -53,7 +49,8 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
         for name, func in pairs(shimmed) do
             glib[name] = func
         end
-        gfs.file_readable = gfs_shim
+        gfs.dir_readable = gfs_shim_dir_readable
+        gfs.file_readable = gfs_shim_file_readable
         theme.icon_theme = icon_theme
     end)
 
