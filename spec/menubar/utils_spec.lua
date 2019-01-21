@@ -27,12 +27,19 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
             shimmed[name] = glib[name]
             glib[name] = function() return retval end
         end
-
+--[[
         shim('get_home_dir',         root .. "/home")
         shim('get_user_data_dir',    root .. "/home/.local/share")
         shim('get_system_data_dirs', {
             root .. "/usr/local/share",
             root .. "/usr/share"
+        })
+--]]
+        shim('get_home_dir',         "/home")
+        shim('get_user_data_dir',    "/home/.local/share")
+        shim('get_system_data_dirs', {
+            "/usr/local/share",
+            "/usr/share"
         })
 
         gfs_shim = gfs.file_readable
