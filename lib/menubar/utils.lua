@@ -210,18 +210,14 @@ end
 -- @tparam string icon_file Short or full name of the icon.
 -- @treturn string|boolean Full name of the icon, or false on failure.
 function utils.lookup_icon_uncached(icon_file)
-print("1.1>",icon_file)
     if not icon_file or icon_file == "" then
         return false
     end
 
     local icon_file_ext = icon_file:match(".*%.(.-)$")print("1>",icon_file)
-print("1.2>",icon_file_ext)
     if icon_file:sub(1, 1) == '/' and supported_icon_formats[icon_file_ext] then
         -- If the path to the icon is absolute and its format is
         -- supported, do not perform a lookup.
-print("1.3>",icon_file)
-print("1.4>",gfs.file_readable(icon_file))
         return gfs.file_readable(icon_file) and icon_file or nil
     else
         for _, directory in ipairs(get_icon_lookup_path()) do
