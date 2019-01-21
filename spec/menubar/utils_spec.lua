@@ -12,8 +12,10 @@ describe("menubar.utils lookup_icon_uncached", function()
     local icon_theme
 
     local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
+print("2.1>",root)
 
     local function assert_found_in_path(icon, path)
+print("2.2>",icon, path)
         assert.matches(path .. '$', utils.lookup_icon_uncached(icon) or '')
     end
 
@@ -51,6 +53,7 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .local/share/icons/icon[4-5].png
         --     .icons/icon5.png
 
+print("2.3>")
         assert_found_in_path('icon1', '/usr/share/pixmaps/icon1.png')
         assert_found_in_path('icon2', '/usr/share/icons/icon2.png')
         assert_found_in_path('icon3', '/usr/local/share/icons/icon3.png')
@@ -68,6 +71,7 @@ describe("menubar.utils lookup_icon_uncached", function()
 
 -- Check for no argument :: if not icon_file or icon_file == "" then
     it('no icon specified', function()
+print("2.4>")
         assert.is_false(utils.lookup_icon_uncached())
         assert.is_false(utils.lookup_icon_uncached(nil)) -- Same as above?
         assert.is_false(utils.lookup_icon_uncached(false))
@@ -83,9 +87,10 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     usr/share/icon6.xpm
         --     usr/share/icon7.svg
 
-        assert_found_in_path(root..'/usr/share/icon5.png', '/usr/share/icon5.png')
-        assert_found_in_path('./spec/menubar/usr/share/icon6.xpm', './spec/menubar/usr/share/icon6.xpm')
-        assert_found_in_path('./spec/menubar/usr/share/icon7.svg', './spec/menubar/usr/share/icon7.svg')
+print("2.5>")
+        assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
+        assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
+        assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
 
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
@@ -100,9 +105,10 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
+print("2.6>")
         assert_found_in_path('icon5.png', '/.icons/icon5.png')
-        assert_found_in_path('icon6.xpm', './spec/menubar/home/.icons/icon6.xpm')
-        assert_found_in_path('icon7.svg', './spec/menubar/home/.icons/icon7.svg')
+        assert_found_in_path('icon6.xpm', '/.icons/icon6.xpm')
+        assert_found_in_path('icon7.svg', '/.icons/icon7.svg')
 
         --  Will fail as file does not exist (but extension is supported)
         assert.is_false(utils.lookup_icon_uncached('icon8.png'))
@@ -116,6 +122,7 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
+print("2.7>")
         assert_found_in_path('icon6', './spec/menubar/home/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
         assert_found_in_path('icon7', './spec/menubar/home/.icons/icon7.svg') -- Similar to original tests and testing svg extension
 
