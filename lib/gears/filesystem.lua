@@ -46,9 +46,14 @@ end
 -- @tparam string filename The file path.
 -- @treturn boolean True if file exists and is readable.
 function filesystem.file_readable(filename)
+print("3.1",filename)
     local gfile = Gio.File.new_for_path(filename)
+print("3.2",gfile)
     local gfileinfo = gfile:query_info("standard::type,access::can-read",
                                        Gio.FileQueryInfoFlags.NONE)
+print("3.3",gfileinfo)
+print("3.4",gfileinfo:get_file_type())
+print("3.5",gfileinfo:get_attribute_boolean("access::can-read"))
     return gfileinfo and gfileinfo:get_file_type() ~= "DIRECTORY" and
         gfileinfo:get_attribute_boolean("access::can-read")
 end
