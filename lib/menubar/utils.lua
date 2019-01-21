@@ -22,6 +22,8 @@ local protected_call = require("gears.protected_call")
 local gstring = require("gears.string")
 local unpack = unpack or table.unpack -- luacheck: globals unpack (compatibility with Lua 5.1)
 
+local inspect = require("inspect")
+
 local utils = {}
 
 -- NOTE: This icons/desktop files module was written according to the
@@ -134,6 +136,7 @@ local icon_lookup_path = nil
 --- Get a list of icon lookup paths.
 -- @treturn table A list of directories, without trailing slash.
 local function get_icon_lookup_path()
+print(inspect(icon_lookup_path))
     if icon_lookup_path then return icon_lookup_path end
 
     local function ensure_args(t, paths)
