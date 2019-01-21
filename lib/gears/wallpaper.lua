@@ -45,25 +45,19 @@ local function get_screen(s)
 end
 
 local function resolve_wallpaper(wallpaper, path, s)
-    local wp = wallpaper
-    local wp_type = type(wp)
+    local wp_type = type(wallpaper)
 
-    -- Pass types we don't resolve (eg: cairo surface) straight through untouched
+    -- Pass types we don't resolve straight through untouched
     if wp_type ~= "string" and wp_type ~= "table" and wp_type ~= "function" then return wallpaper end
 
-    -- Table & function need to resolve down to a string or theme_assets
-    if wp_type == "table" then wp = s and wp[s.index] or wp[1]
-    elseif wp_type == "function" then wp = wp(s)
-    end
+    local wp = ""
+    -- Table & function need to resolve down to a string or surface
+    if wp_type == "table" then wp = s and wallpaper[s.index] or wallpaper[1]
+    elseif wp_type == "function" then wp = wallpaper(s) end
 
-    if type(wp) == "string" then
-        local wp_path = wp:sub(1, 1) == '/' and "" or (path or "")
-        return wp_path .. wp
-    else
-        return wp
-    end
+    if type(wp) == "string" then wp = (wp:sub(1, 1) ~= '/' and (path or "") or "") .. wp end
+    return wp
 end
-
 --- Prepare the needed state for setting a wallpaper.
 -- This function returns a cairo context through which a wallpaper can be drawn.
 -- The context is only valid for a short time and should not be saved in a
