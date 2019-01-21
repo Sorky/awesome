@@ -126,8 +126,8 @@ describe("menubar.utils lookup_icon_uncached", function()
         --     .icons/icon6.xpm
         --     .icons/icon7.svg
 
-        assert_found_in_path('icon6', './spec/menubar/home/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
-        assert_found_in_path('icon7', './spec/menubar/home/.icons/icon7.svg') -- Similar to original tests and testing svg extension
+        assert_found_in_path('icon6', '/.icons/icon6.xpm') -- Similar to original tests and testing xpm extension
+        assert_found_in_path('icon7', '/.icons/icon7.svg') -- Similar to original tests and testing svg extension
 
         assert.is_false(utils.lookup_icon_uncached('/png')) -- supported file does not exist in given location
         assert.is_false(utils.lookup_icon_uncached('.png')) -- file does not exist
