@@ -35,8 +35,8 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
             root .. "/usr/share"
         })
 
-        gfs_shim = gfs[file_readable]
-        gfs[file_readable] = function(filename) print("YES!") return gfs_shim(root..filename) end
+        gfs_shim = gfs.file_readable
+        gfs.file_readable = function(filename) print("YES!") return gfs_shim(root..filename) end
 
         icon_theme = theme.icon_theme
         theme.icon_theme = 'awesome'
@@ -46,7 +46,7 @@ print("2.2.3>",utils.lookup_icon_uncached(icon))
         for name, func in pairs(shimmed) do
             glib[name] = func
         end
-        gfs[file_readable] = gfs_shim
+        gfs.file_readable = gfs_shim
         theme.icon_theme = icon_theme
     end)
 --[[
