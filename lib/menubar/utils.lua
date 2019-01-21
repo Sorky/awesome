@@ -22,8 +22,6 @@ local protected_call = require("gears.protected_call")
 local gstring = require("gears.string")
 local unpack = unpack or table.unpack -- luacheck: globals unpack (compatibility with Lua 5.1)
 
-local inspect = require("inspect")
-
 local utils = {}
 
 -- NOTE: This icons/desktop files module was written according to the
@@ -136,7 +134,6 @@ local icon_lookup_path = nil
 --- Get a list of icon lookup paths.
 -- @treturn table A list of directories, without trailing slash.
 local function get_icon_lookup_path()
-print(inspect(icon_lookup_path))
     if icon_lookup_path then return icon_lookup_path end
 
     local function ensure_args(t, paths)
@@ -213,26 +210,20 @@ end
 -- @tparam string icon_file Short or full name of the icon.
 -- @treturn string|boolean Full name of the icon, or false on failure.
 function utils.lookup_icon_uncached(icon_file)
---print("1.1>",icon_file)
     if not icon_file or icon_file == "" then
         return false
     end
 
     local icon_file_ext = icon_file:match(".*%.(.-)$")
---print("1.2>",icon_file_ext)
     if icon_file:sub(1, 1) == '/' and supported_icon_formats[icon_file_ext] then
         -- If the path to the icon is absolute and its format is
         -- supported, do not perform a lookup.
---print("1.3>",icon_file)
---print("1.4>",gfs.file_readable(icon_file))
         return gfs.file_readable(icon_file) and icon_file or nil
     else
         for _, directory in ipairs(get_icon_lookup_path()) do
---print("1.5>",directory)
             local directory_file = directory .. "/" .. icon_file
             if supported_icon_formats[icon_file_ext] and
                     gfs.file_readable(directory_file) then
---print("1.6>",directory_file)
                 return directory_file
             else
                 -- Icon is probably specified without path and format,
@@ -241,13 +232,11 @@ function utils.lookup_icon_uncached(icon_file)
                 for format, _ in pairs(supported_icon_formats) do
                     local possible_file = directory_file .. "." .. format
                     if gfs.file_readable(possible_file) then
---print("1.7>",possible_file)
                         return possible_file
                     end
                 end
             end
         end
---print("1.8>",possible_file)
         return false
     end
 end
