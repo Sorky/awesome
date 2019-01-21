@@ -52,8 +52,8 @@ print("3.2",gfile)
     local gfileinfo = gfile:query_info("standard::type,access::can-read",
                                        Gio.FileQueryInfoFlags.NONE)
 print("3.3",gfileinfo)
-print("3.4",gfileinfo:get_file_type())
-print("3.5",gfileinfo:get_attribute_boolean("access::can-read"))
+print("3.4",gfileinfo and gfileinfo:get_file_type())
+print("3.5",gfileinfo and gfileinfo:get_attribute_boolean("access::can-read"))
     return gfileinfo and gfileinfo:get_file_type() ~= "DIRECTORY" and
         gfileinfo:get_attribute_boolean("access::can-read")
 end
