@@ -171,10 +171,9 @@ local tasklist_buttons = gears.table.join(
                                           end))
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry",
-    function()
-        gears.wallpaper.maximized(beautiful.wallpaper, s, true, beautiful.wallpaper_path)
-    end)
+screen.connect_signal("property::geometry", function()
+    gears.wallpaper.maximized(beautiful.wallpaper, s, true, beautiful.wallpaper_path)
+end)
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
