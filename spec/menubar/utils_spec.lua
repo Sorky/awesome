@@ -7,13 +7,12 @@ local utils = require("menubar.utils")
 local theme = require("beautiful")
 local glib = require("lgi").GLib
 
-local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
-print("2.1>",root)
-
 describe("menubar.utils lookup_icon_uncached", function()
     local shimmed = {}
     local icon_theme
 
+    local root = (os.getenv("SOURCE_DIRECTORY") or '.') .. "/spec/menubar"
+print("2.1>",root)
 
     local function assert_found_in_path(icon, path)
 print("2.2.1>",icon)
@@ -91,9 +90,9 @@ print("2.4>")
         --     usr/share/icon7.svg
 
 print("2.5>")
-        --assert_found_in_path('/usr/share/icon5.png', '/usr/share/icon5.png')
-        assert_found_in_path('/usr/share/icon6.xpm', '/usr/share/icon6.xpm')
-        assert_found_in_path('/usr/share/icon7.svg', '/usr/share/icon7.svg')
+        assert_found_in_path(root..'/usr/share/icon5.png', root..'/usr/share/icon5.png')
+        assert_found_in_path(root..'/usr/share/icon6.xpm', root..'/usr/share/icon6.xpm')
+        assert_found_in_path(root..'/usr/share/icon7.svg', root..'/usr/share/icon7.svg')
 
         assert.is_same(nil, utils.lookup_icon_uncached('/.png')) -- supported file does not exist in location
         assert.is_same(nil, utils.lookup_icon_uncached('/blah/icon6.png')) -- supported file does not exist in location
