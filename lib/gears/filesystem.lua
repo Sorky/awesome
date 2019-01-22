@@ -153,4 +153,30 @@ function filesystem.get_dir(d)
     end
 end
 
+math.randomseed( os.clock() % 1 * 1e6 )
+--- Get the name of a random file from a given directory.
+-- @tparam string path The directory to search.
+-- @tparam[opt] table exts Specific extensions [eg: { "jpg", "png" }] to limit
+--   the search to. If ommited, all files are considered.
+-- @treturn string A randomly selected filename from the specified path (with
+--   a specified extension if required).
+function filesystem.get_random_file_from_dir(path, exts)
+    local files, valid_exts = {}, {}
+
+    -- Transforms { "jpg", ... } into { [jpg] = true, ... }
+    if exts then for i, j in ipairs(exts) do valid_exts[j:lower()] = true end end
+
+    -- Build a table of files from the path with the required extensions
+    local file_list = Gio.File.new_for_path(path):enumerate_children("standard::name", 0)
+    for file in function() return file_list:next_file() end do
+        local file_name = file:get_attribute_as_string("standard::name")
+        if not exts or valid_exts[file_name:lower():match("%.(.*)$")] then
+            table.insert(files, file_name)
+        end
+    end
+
+    -- Return a randomly selected filename from the file table
+    return files[math.random(#files)]
+end
+
 return filesystem
