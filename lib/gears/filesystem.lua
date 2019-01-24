@@ -154,9 +154,10 @@ function filesystem.get_dir(d)
 end
 
 math.randomseed( os.clock() % 1 * 1e6 )
+
 --- Get the name of a random file from a given directory.
 -- @tparam string path The directory to search.
--- @tparam[opt] table exts Specific extensions [eg: { "jpg", "png" }] to limit
+-- @tparam[opt] table exts Specific extensions eg: `{ "jpg", "png" }` to limit
 --   the search to. If ommited, all files are considered.
 -- @treturn string A randomly selected filename from the specified path (with
 --   a specified extension if required).
